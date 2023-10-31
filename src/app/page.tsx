@@ -20,24 +20,36 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
   const numberOfPages = Math.ceil(totalUsers[0].count / numberOfItems);
 
+  let safePageNumber = 1;
+
+  if (pageNumber < 1) {
+    safePageNumber = 1;
+  } else if (pageNumber > numberOfPages) {
+    safePageNumber = 1;
+  } else {
+    safePageNumber = pageNumber;
+  }
+
   const offsetItems =
-    pageNumber > 1 && pageNumber <= numberOfPages
-      ? (pageNumber - 1) * numberOfItems
-      : 0;
+    safePageNumber > 1 ? (safePageNumber - 1) * numberOfItems : 0;
 
   const allUsers = await db.select().from(users).limit(6).offset(offsetItems);
 
   const prevSearchParams = new URLSearchParams();
   const nextSearchParams = new URLSearchParams();
 
-  if (pageNumber > 2) {
-    prevSearchParams.set("page", `${pageNumber - 1}`);
+  if (safePageNumber > 2) {
+    prevSearchParams.set("page", `${safePageNumber - 1}`);
   } else {
     prevSearchParams.delete("page");
   }
 
-  if (pageNumber > 0) {
-    nextSearchParams.set("page", `${pageNumber + 1}`);
+  if (safePageNumber > 0) {
+    if (safePageNumber === numberOfPages) {
+      nextSearchParams.set("page", `${numberOfPages}`);
+    } else {
+      nextSearchParams.set("page", `${safePageNumber + 1}`);
+    }
   } else {
     nextSearchParams.delete("page");
   }
@@ -80,9 +92,9 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
       <div className="flex my-5 justify-end items-center gap-5">
         <Link
-          href={pageNumber < 2 ? `` : `/?${prevSearchParams}`}
+          href={`/?${prevSearchParams}`}
           className={`${
-            pageNumber < 2
+            safePageNumber < 2
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-500"
           } px-5 py-2 rounded-md text-white `}
@@ -91,9 +103,9 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         </Link>
 
         <Link
-          href={pageNumber >= numberOfPages ? `` : `/?${nextSearchParams}`}
+          href={`/?${nextSearchParams}`}
           className={`${
-            pageNumber >= numberOfPages
+            safePageNumber >= numberOfPages
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-500"
           } px-5 py-2 rounded-md text-white `}
