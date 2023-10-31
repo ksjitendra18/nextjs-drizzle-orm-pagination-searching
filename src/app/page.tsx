@@ -1,11 +1,50 @@
 import { users } from "@/db/schema";
 import { db } from "@/db/setup";
+import { sql } from "drizzle-orm";
+import Link from "next/link";
 
-export default async function Home() {
-  const allUsers = await db.select().from(users);
+interface SearchParamsProps {
+  searchParams: {
+    page: string;
+  };
+}
+
+export default async function Home({ searchParams }: SearchParamsProps) {
+  const pageNumber = Number(searchParams.page ?? 1);
+
+  const numberOfItems = 6;
+
+  const totalUsers = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(users);
+
+  const numberOfPages = Math.ceil(totalUsers[0].count / numberOfItems);
+
+  const offsetItems =
+    pageNumber > 1 && pageNumber <= numberOfPages
+      ? (pageNumber - 1) * numberOfItems
+      : 0;
+
+  const allUsers = await db.select().from(users).limit(6).offset(offsetItems);
+
+  const prevSearchParams = new URLSearchParams();
+  const nextSearchParams = new URLSearchParams();
+
+  if (pageNumber > 2) {
+    prevSearchParams.set("page", `${pageNumber - 1}`);
+  } else {
+    prevSearchParams.delete("page");
+  }
+
+  if (pageNumber > 0) {
+    nextSearchParams.set("page", `${pageNumber + 1}`);
+  } else {
+    nextSearchParams.delete("page");
+  }
+
   return (
     <main className="max-w-7xl my-5 mx-auto px-3">
-      <h2 className="text-center text-2xl font-bold my-5">Users</h2>
+      <h2 className="text-center text-2xl font-bold my-5">Users </h2>
       <div className=" relative  overflow-hidden ">
         <table className=" border-2  rounded-xl border-slate-700 table-fixed w-full text-sm">
           <thead>
@@ -37,6 +76,30 @@ export default async function Home() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex my-5 justify-end items-center gap-5">
+        <Link
+          href={pageNumber < 2 ? `` : `/?${prevSearchParams}`}
+          className={`${
+            pageNumber < 2
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500"
+          } px-5 py-2 rounded-md text-white `}
+        >
+          Previous
+        </Link>
+
+        <Link
+          href={pageNumber >= numberOfPages ? `` : `/?${nextSearchParams}`}
+          className={`${
+            pageNumber >= numberOfPages
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500"
+          } px-5 py-2 rounded-md text-white `}
+        >
+          Next
+        </Link>
       </div>
     </main>
   );
