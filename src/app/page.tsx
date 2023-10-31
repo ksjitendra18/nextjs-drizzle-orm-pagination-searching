@@ -2,6 +2,7 @@ import { users } from "@/db/schema";
 import { db } from "@/db/setup";
 import { sql } from "drizzle-orm";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface SearchParamsProps {
   searchParams: {
@@ -23,9 +24,9 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   let safePageNumber = 1;
 
   if (pageNumber < 1) {
-    safePageNumber = 1;
+    redirect("/");
   } else if (pageNumber > numberOfPages) {
-    safePageNumber = 1;
+    redirect("/");
   } else {
     safePageNumber = pageNumber;
   }
