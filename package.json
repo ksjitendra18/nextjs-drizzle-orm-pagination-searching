@@ -1,5 +1,5 @@
 {
-  "name": "next-js-server-side-pagination",
+  "name": "next-js-server-side-pagination-searching",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,25 +11,27 @@
     "db:push": "drizzle-kit push:mysql"
   },
   "dependencies": {
-    "drizzle-orm": "^0.28.6",
-    "mysql2": "^3.6.2",
-    "next": "14.0.0",
-    "react": "^18",
-    "react-dom": "^18"
+    "drizzle-orm": "^0.32.1",
+    "lucide-react": "^0.427.0",
+    "mysql2": "^3.11.0",
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "use-debounce": "^10.0.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.2.0",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10",
-    "dotenv": "^16.3.1",
-    "drizzle-kit": "^0.19.13",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.0",
-    "postcss": "^8",
-    "tailwindcss": "^3",
-    "tsx": "^3.14.0",
-    "typescript": "^5"
+    "@faker-js/faker": "^8.4.1",
+    "@types/node": "^20.14.14",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.23.1",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "tsx": "^4.16.5",
+    "typescript": "^5.5.4"
   }
 }

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "e7d3b57a-155a-40c2-8c03-6b78d192ddeb",
+  "id": "f91afd1e-ef7e-452f-a8d9-ed8af16d2870",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -27,6 +27,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
         }
       },
       "indexes": {},
@@ -49,10 +57,13 @@
       }
     }
   },
-  "schemas": {},
   "_meta": {
     "schemas": {},
     "tables": {},
     "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
   }
 }

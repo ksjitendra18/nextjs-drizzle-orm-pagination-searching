@@ -1,12 +1,12 @@
 {
-  "version": "5",
+  "version": "7",
   "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1698479734249,
-      "tag": "0000_tan_captain_britain",
+      "when": 1722685072603,
+      "tag": "0000_yummy_black_panther",
       "breakpoints": true
     }
   ]

@@ -2,7 +2,7 @@ import { users } from "@/db/schema";
 import { db } from "@/db/setup";
 import { like, sql } from "drizzle-orm";
 import Link from "next/link";
-import Search from "./components/search";
+import Search from "../components/search";
 
 interface SearchParamsProps {
   searchParams: {
@@ -49,6 +49,28 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     nextSearchParams.set("page", `${numberOfPages}`);
   }
 
+  const generatePaginationArray = (current: number, max: number) => {
+    if (max <= 7) return Array.from({ length: max }, (_, i) => i + 1);
+
+    if (current <= 4) return [1, 2, 3, 4, 5, "...", max];
+    if (current >= max - 3)
+      return [1, "...", max - 4, max - 3, max - 2, max - 1, max];
+
+    return [1, "...", current - 1, current, current + 1, "...", max];
+  };
+
+  const paginationArray = generatePaginationArray(pageNumber, numberOfPages);
+
+  const createPageUrl = (page: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    if (page === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", page.toString());
+    }
+    return `/users?${params.toString()}`;
+  };
+
   return (
     <main className="max-w-7xl my-5 mx-auto px-3">
       <div className="flex gap-4 items-center">
@@ -57,8 +79,8 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       </div>
       {allUsers.length > 0 ? (
         <>
-          <div className="relative overflow-hidden">
-            <table className="border-2 rounded-xl border-slate-700 table-fixed w-full text-sm">
+          <div className=" relative  overflow-hidden ">
+            <table className=" border-2  rounded-xl border-slate-700 table-fixed w-full text-sm">
               <thead>
                 <tr>
                   <th className="border-b-2 border-slate-700  font-medium p-4 pl-8  pb-3 text-left">
@@ -89,24 +111,46 @@ export default async function Home({ searchParams }: SearchParamsProps) {
               </tbody>
             </table>
           </div>
-          <div className="flex my-5 justify-end items-center gap-5">
+
+          <div className="flex my-5 justify-center items-center gap-2">
             <Link
-              href={`/?${prevSearchParams}`}
-              className={`${
-                safePageNumber === 1
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-500"
-              } px-5 py-2 rounded-md text-white`}
+              href={createPageUrl(safePageNumber - 1)}
+              className={`px-3 py-1 rounded border ${
+                pageNumber === 1
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-white text-blue-600 hover:bg-blue-50"
+              }`}
             >
-              Previous
+              Prev
             </Link>
+
+            {paginationArray.map((item, index) =>
+              item === "..." ? (
+                <span key={index} className="px-3 py-1">
+                  ...
+                </span>
+              ) : (
+                <Link
+                  key={index}
+                  href={createPageUrl(item)}
+                  className={`px-3 py-1 rounded border ${
+                    pageNumber === item
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  {item}
+                </Link>
+              )
+            )}
+
             <Link
-              href={`/?${nextSearchParams}`}
-              className={`${
-                safePageNumber === numberOfPages
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-500"
-              } px-5 py-2 rounded-md text-white`}
+              href={createPageUrl(Math.min(numberOfPages, safePageNumber + 1))}
+              className={`px-3 py-1 rounded border ${
+                pageNumber === numberOfPages
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-white text-blue-600 hover:bg-blue-50"
+              }`}
             >
               Next
             </Link>
