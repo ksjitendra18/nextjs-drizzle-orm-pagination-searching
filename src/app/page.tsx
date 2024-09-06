@@ -1,3 +1,4 @@
+import Search from "@/components/search";
 import { users } from "@/db/schema";
 import { db } from "@/db/setup";
 
@@ -5,7 +6,11 @@ export default async function Home() {
   const allUsers = await db.select().from(users);
   return (
     <main className="max-w-7xl my-5 mx-auto px-3">
-      <h2 className="text-center text-2xl font-bold my-5">Users</h2>
+      <div className="flex gap-4 items-center">
+        <h2 className="text-2xl font-bold my-5">Users </h2>
+        <Search />
+      </div>
+
       <div className=" relative  overflow-hidden ">
         <table className=" border-2  rounded-xl border-slate-700 table-fixed w-full text-sm">
           <thead>
