@@ -2,7 +2,7 @@ import { users } from "@/db/schema";
 import { db } from "@/db/setup";
 import { like, sql } from "drizzle-orm";
 import Link from "next/link";
-import Search from "./components/search";
+import Search from "@/components/search";
 
 interface SearchParamsProps {
   searchParams: {

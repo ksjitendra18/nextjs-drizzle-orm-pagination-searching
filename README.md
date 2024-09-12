@@ -1,3 +1,3 @@
-Server Side Pagination to Next.js 13/14 Drizzle ORM
+Server Side Pagination and Searching to Next.js 13/14 Drizzle ORM
 
-Blog Post: [Server Side Pagination in Next.js 13/14 Server Components using Drizzle ORM](https://everythingcs.dev/blog/nextjs-server-side-pagination-server-components-drizzle-orm/)
+Blog Post: [Pagination and Searching in Nextjs Server Components and Drizzle ORM](https://everythingcs.dev/blog/nextjs-server-components-pagination-searching-drizzle-orm/)
